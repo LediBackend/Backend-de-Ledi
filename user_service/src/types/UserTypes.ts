@@ -1,19 +1,24 @@
 //dates of user
 export interface User {
-    id: string,
-    // userName: string,
+    userName: string,
     name: string,
-    // lastName: string,
-    // email: string,
-    // fecha_nacimiento: number,
-    // password: string,
-    // avatar?: string
+    lastName: string,
+    email: string,
+    password: string,
+    date_user: Date,
+    rol: string,
+    avatar?: string,
+    preference?: {
+        category: string[],
+        lenguaje: string
+    }
 }
 
 // funciones del usuario
 export interface IUserRepository {
-    // createUser(user: User): Promise<User>,
-    findUser(): Promise<User[]>
+    // findUser(): Promise<User[]>
+    createUser(user: User): Promise<User>;
+
     // findByID(id: string): Promise<User | null>
     // updateUSer(id: string, User: Partial<User>): Promise<User | null>;
     // deleteUser(id: string): Promise<void>

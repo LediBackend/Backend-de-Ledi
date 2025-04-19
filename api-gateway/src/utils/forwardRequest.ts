@@ -15,7 +15,7 @@ export const forwardRequest = async (req: Request, res: Response, targetBaseUrl:
         const response = await axios({
             method,
             url,
-            data: ['get', 'delete', 'put', 'post'].includes(method) ? undefined : req.body,
+            data: req.body,
             headers: safeHeaders,
             timeout: 15000,
         });
@@ -23,6 +23,7 @@ export const forwardRequest = async (req: Request, res: Response, targetBaseUrl:
         // Enviar la respuesta sin forzar JSON
         res.status(response.status).send(response.data);
     } catch (error: any) {
+        console.log(error)
         console.error('Error en el Gateway:', error.message);
         res.status(error?.response?.status || 500).json({
             message: 'Error desde el API Gateway',

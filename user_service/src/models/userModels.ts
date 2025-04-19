@@ -7,30 +7,43 @@ const UserSchema = new Schema<User>({
         type: String,
         required: true
     },
-    // lastName: {
-    //     type: String,
-    //     required: true
-    // },
-    // userName: {
-    //     type: String,
-    //     required: true
-    // },
-    // email: {
-    //     type: String,
-    //     required: true
-    // },
-    // fecha_nacimiento: {
-    //     type: Number,
-    //     required: true
-    // },
-    // password: {
-    //     type: String,
-    //     required: true
-    // },
-    // avatar: {
-    //     type: String,
-    //     required: false
-    // }
+    lastName: {
+        type: String,
+        required: true
+    },
+    userName: {
+        type: String,
+        required: true
+    },
+    date_user: {
+        type: Date,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    avatar: {
+        type: String,
+
+    }, preference: {
+        type: new Schema(
+            {
+                category: {
+                    type: [String],
+                    required: true,
+                },
+                lenguaje: {
+                    type: String,
+                    required: true,
+                },
+            },
+        ),
+    },
 
 })
 export const UserModel = mongoose.model<User>("User", UserSchema)

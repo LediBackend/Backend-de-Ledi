@@ -4,8 +4,8 @@ import { forwardRequest } from '../utils/forwardRequest';
 export const gatewayRouter = express.Router();
 
 // Por ejemplo, redirigir a un microservicio de usuarios
-gatewayRouter.use('/users', (req, res) => {
-    forwardRequest(req, res, 'http://localhost:3400');
+gatewayRouter.use('/user', (req, res) => {
+    forwardRequest(req, res, 'http://localhost:3402');
 });
 
 // Redirigir a un microservicio de productos
