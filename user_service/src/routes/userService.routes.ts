@@ -6,4 +6,4 @@ import { checkValidationErrors } from "../middlewares/express-validator";
 
 export const userRoutes = Router();
 
-userRoutes.post("/user", createUsers);
+userRoutes.post("/register", createUsers);

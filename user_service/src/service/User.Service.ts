@@ -1,5 +1,4 @@
 import { UserModel } from "../models/userModels";
-
 import { IUserRepository, User } from "../types/UserTypes";
 import { hashPassword } from "../utils/hash-pas";
 export class UserService implements IUserRepository {
