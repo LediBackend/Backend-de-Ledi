@@ -14,4 +14,4 @@ const authSchema = new Schema<AuthUser>({
     },
 
 })
-export const UserModel = mongoose.model<AuthUser>("User", authSchema)
+export const authModel = mongoose.model<AuthUser>("User", authSchema)

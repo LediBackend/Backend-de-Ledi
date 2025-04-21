@@ -8,7 +8,7 @@ const connectDB = async (): Promise<void> => {
     try {
         await mongoose.connect(mongoURL, {
             // Puedes agregar opciones si las necesitas
-            serverSelectionTimeoutMS: 30000, // 30 segundos de timeout
+
         });
         console.log('MongoDB connected');
     } catch (error) {
