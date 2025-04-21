@@ -2,26 +2,32 @@ import { Schema, model, Document, ObjectId } from "mongoose";
 
 interface IBook extends Document {
   title: string;
-  author: ObjectId;
+  author: string;
   descriptions: string;
   category: string;
   available?: boolean;
   createdAt?: Date;
-  pages: ObjectId[];
-  url: string;
-  idDocument: string;
+  idUser: ObjectId;
+  pathBooks: ObjectId;
+  coverImage: { id_image: string; url_secura: string }; // Cambiado para usar ObjectId
 }
 
 const bookSchema = new Schema<IBook>({
   title: { type: String, required: true },
-  author: { type: Schema.ObjectId, ref: "users", required: true },
-  descriptions: { type: String, required: true }, // Corrección aquí
+  idUser: { type: Schema.Types.ObjectId, ref: "users", required: true }, // Ajustado a ObjectId para idUser
+  author: { type: String, required: true },
+  descriptions: { type: String, required: true },
   category: { type: String, required: true },
   available: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
-  pages: [{ type: Schema.ObjectId, ref: "Pages", required: true }],
-  url: { type: String, required: true },
-  idDocument: { type: String, required: true },
+  pathBooks: { type: Schema.Types.ObjectId, ref: "ContentBooks", required: true },
+  coverImage: {
+    type: {
+      id_image: { type: String, required: true },
+      url_secura: { type: String, required: true },
+    },
+    required: true,
+  },
 });
 
 const Book = model<IBook>("Book", bookSchema);

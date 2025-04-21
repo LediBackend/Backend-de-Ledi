@@ -3,7 +3,8 @@ import morgan from "morgan";
 import express from "express";
 import fileUpload from "express-fileupload";
 import ENV from "./config/env";
-import router from "./routers/books.route";
+import routerBooks from "./routers/books.route";
+import routerContentBooks from "./routers/contentBook.route";
 import connections from "./db/conecctions";
 import chalk from "chalk";
 
@@ -19,7 +20,8 @@ app.use(
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(router);
+app.use(routerBooks);
+app.use(routerContentBooks);
 
 app.listen(ENV.PORT, async () => {
   await connections();
