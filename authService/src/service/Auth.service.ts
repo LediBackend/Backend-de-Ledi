@@ -1,25 +1,19 @@
 import { authModel } from "../models/user.auth";
-import { AuthUser, IAuthRepository } from "../types/auth-types";
+import { IAuthRepository } from "../types/auth-types";
 import bcrypt from "bcrypt";
 import { hashPassword } from "../utils/hash-pas";
+import { save_user } from "../utils/getUserDates";
 
-export class AuthService implements IAuthRepository {
-    async createUser(user: AuthUser): Promise<AuthUser> {
-        const hashedPassword = await hashPassword(user.password);
-        const authSave = new authModel({
-            ...user,
-            password: hashedPassword,
-        });
-        await authSave.save();
-        return authSave;
-    }
-    async findUser(email: string, password: string): Promise<AuthUser | null> {
-        const user = await authModel.findOne({ email });
-        return user
-    }
+// export class AuthService implements IAuthRepository {
 
-    async logout(): Promise<void> {
+//     async findEmail(email: string): Promise<AuthUser | null> {
+//         const user = await authModel.findOne({ email });
+//         return user
+//     }
 
-    }
+//     async login(email: string, password: string): Promise<void> | null {
+//         const user = save_user(email, password)
+//         return user
+//     }
 
-}
+// }

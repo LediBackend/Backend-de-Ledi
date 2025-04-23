@@ -1,7 +1,6 @@
-export const save_user = async (email: string, password: string) => {
+export const save_user = async (idUser: string) => {
     const data = {
-        email: email,
-        password: password
+        idUser
     };
 
     const response = await fetch('http://localhost:3403/save_auth', {

@@ -1,47 +1,60 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt"
 
 declare global {
     namespace Express {
         interface Request {
             user?: any;
         }
-    }
-}
-import { AuthService } from "../service/Auth.service";
-import { generarJWT } from "../helpers/generJWT";
 
-const authService = new AuthService();
+    }
+
+}
+// import { AuthService } from "../service/Auth.service";
+import { generarJWT } from "../helpers/generJWT";
+import { save_user } from "../utils/getUserDates";
+
+// const authService = new AuthService();
 
 declare module "express-session" {
     interface SessionData {
         token?: any;
+        isLoggedIn: boolean;
+        lastName: string;
+        name: string;
+        username: string;
+        date_user: Date,
+        rol: string,
+        avatar?: string,
+        preference?: {
+            category: string[],
+            lenguaje: string
+        }
+
     }
 }
 
-export const postAuth = async (req: Request, res: Response) => {
-    try {
-        const user = req.body;
-        const result = await authService.createUser(user);
-        res.status(201).json({ msg: 'User created successfully', result });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal server error', error: (error as Error).message });
-    }
-};
+
 
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
-        const result = await authService.findUser(email, password);
+        const result = await save_user(email, password)
+        console.log(result.result.name)
 
         if (!result) {
             res.status(401).json({ msg: 'Credenciales incorrectas' });
         } else {
-            console.log(result.id)
-            const id = result.id
+            const id = result.result._id
+            console.log(id)
             const token = await generarJWT(id);
             req.session.token = token;
+            req.session.isLoggedIn = true
+            // req.session.id = result.result.id
+
+
+
             console.log(token)
             res.cookie("token", token, {
                 httpOnly: true,
@@ -64,13 +77,11 @@ export const login = async (req: Request, res: Response) => {
 
 export const getMeCtrl = async (req: Request, res: Response): Promise<void> => {
     try {
-
-        res.status(200).json({ msg: 'hola' });
-
+        const user_data = req.user
+        res.status(200).json({ msg: 'data', user_data });
     } catch (error) {
         res.status(500).json({ message: (error as Error).message });
     }
-
 }
 export const logout = async (req: Request, res: Response) => {
     req.session.destroy((err) => {

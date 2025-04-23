@@ -1,4 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
+
+// Extend the Request interface to include the 'user' property
+declare global {
+    namespace Express {
+        interface Request {
+            user?: any;
+        }
+    }
+}
 import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 
@@ -22,4 +31,3 @@ export const validateJWT = (req: Request, res: Response, next: NextFunction): vo
         next();
     });
 };
-

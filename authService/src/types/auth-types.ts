@@ -3,13 +3,22 @@ import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 
 export interface AuthUser {
-    id(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>, id: any): unknown;
-    email: string;
-    password: string;
+    userName: string,
+    name: string,
+    lastName: string,
+    email: string,
+    date_user: Date,
+    rol: string,
+    avatar?: string,
+    preference?: {
+        category: string[],
+        lenguaje: string
+    }
+
 }
+
 export interface IAuthRepository {
-    createUser(user: AuthUser): Promise<AuthUser>;
-    findUser(email: string, password: string): Promise<AuthUser | null>;
-    logout(): Promise<void>;
+    // createUser(user: AuthUser): Promise<AuthUser>;
+    // findUser(idUser: String): Promise<AuthUser | null>;
 
 }

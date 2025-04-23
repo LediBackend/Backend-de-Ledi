@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { validateUser } from "../validations/user.validations";
+import { registerValidation } from "../validations/user.validations";
 
-import { createUsers } from "../controllers/user.controllers";
-import { checkValidationErrors } from "../middlewares/express-validator";
+import { createUsers, getByEmail, getById } from "../controllers/user.controllers";
 
 export const userRoutes = Router();
 
-userRoutes.post("/register", createUsers);
+userRoutes.post("/register", registerValidation, createUsers);
+userRoutes.get("/user/:id", getById);
+userRoutes.post("/user/", getByEmail);

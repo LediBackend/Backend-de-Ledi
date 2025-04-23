@@ -1,5 +1,6 @@
 import express from 'express';
 import { forwardRequest } from '../utils/forwardRequest';
+import { validateJWT } from '../middleware/validateJWT';
 
 export const gatewayRouter = express.Router();
 
@@ -11,3 +12,12 @@ gatewayRouter.use('/register', (req, res) => {
 gatewayRouter.use('/login', (req, res) => {
     forwardRequest(req, res, 'http://localhost:3403');
 });
+//logout
+gatewayRouter.use('/logout', (req, res) => {
+    forwardRequest(req, res, 'http://localhost:3403');
+});
+// get user
+gatewayRouter.use('/getUser', validateJWT, (req, res) => {
+    forwardRequest(req, res, 'http://localhost:3403');
+});
+

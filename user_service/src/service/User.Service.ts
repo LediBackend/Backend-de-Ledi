@@ -1,6 +1,8 @@
 import { UserModel } from "../models/userModels";
 import { IUserRepository, User } from "../types/UserTypes";
 import { hashPassword } from "../utils/hash-pas";
+import { Types } from "mongoose";
+import mongoose from "mongoose";
 export class UserService implements IUserRepository {
 
     async createUser(user: User): Promise<User> {
@@ -13,8 +15,14 @@ export class UserService implements IUserRepository {
         return await userToSave.save();
     }
 
-    async findUserById(id: string): Promise<User | null> {
+    async findByID(id: string | Types.ObjectId): Promise<User | null> {
         return await UserModel.findById(id).exec();
+    }
+    async findByEmail(email: string): Promise<User | null> {
+        return await UserModel.findOne({ email });
+    }
+    async findByUserName(userName: string): Promise<User | null> {
+        return await UserModel.findOne({ userName });
     }
 
     async deleteUser(id: string): Promise<void> {

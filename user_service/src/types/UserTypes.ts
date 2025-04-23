@@ -6,7 +6,7 @@ export interface User {
     email: string,
     password: string,
     date_user: Date,
-    rol: string,
+    rol?: string,
     avatar?: string,
     preference?: {
         category: string[],
@@ -19,7 +19,10 @@ export interface IUserRepository {
     // findUser(): Promise<User[]>
     createUser(user: User): Promise<User>;
 
-    // findByID(id: string): Promise<User | null>
+    findByID(id: any): Promise<User | null>
+
+    findByEmail(email: string): Promise<User | null>
+    findByUserName(user: string): Promise<User | null>
     // updateUSer(id: string, User: Partial<User>): Promise<User | null>;
     // deleteUser(id: string): Promise<void>
 }
