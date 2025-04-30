@@ -7,4 +7,4 @@ export const userRoutes = Router();
 
 userRoutes.post("/register", registerValidation, createUsers);
 userRoutes.get("/user/:id", getById);
-userRoutes.post("/user/", getByEmail);
+userRoutes.post("/user/email", getByEmail);

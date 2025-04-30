@@ -1,5 +1,6 @@
 //dates of user
 export interface User {
+    id: any;
     userName: string,
     name: string,
     lastName: string,
@@ -8,9 +9,9 @@ export interface User {
     date_user: Date,
     rol?: string,
     avatar?: string,
-    preference?: {
+    preference: {
         category: string[],
-        lenguaje: string
+        lenguage: string
     }
 }
 

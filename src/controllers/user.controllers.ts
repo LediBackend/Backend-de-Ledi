@@ -1,6 +1,6 @@
 import { UserService } from "../service/User.Service";
 import { Request, Response } from "express";
-import { save_user } from "../utils/authPost";
+import { save_user } from "../utils/postUser";
 interface UserRequestParams {
     id: string;
 }
@@ -14,6 +14,7 @@ export const createUsers = async (req: Request<UserRequestParams>, res: Response
         const findUser = await userService.findByUserName(users.userName)
         if (!findEmail && !findUser) {
             const result = await userService.createUser(users)
+            save_user(result.id, result.preference.category)
             res.status(201).json({ msg: "User create ", result })
         }
         if (findEmail) {
@@ -22,9 +23,6 @@ export const createUsers = async (req: Request<UserRequestParams>, res: Response
         if (findUser) {
             res.status(302).json({ msg: 'the userName is used' })
         }
-
-
-
 
     } catch (error) {
         console.log(error)
