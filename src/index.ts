@@ -7,7 +7,9 @@ import session from 'express-session';
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+app.use(cors({
+    credentials: true,
+}));
 app.use(express.json());
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
