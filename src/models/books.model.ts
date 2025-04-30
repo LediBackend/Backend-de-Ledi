@@ -8,6 +8,7 @@ interface IBook extends Document {
   available?: boolean;
   createdAt?: Date;
   idUser?: ObjectId;
+  lenguage: String;
   pathBooks: ObjectId;
   coverImage: { id_image: string; url_secura: string };
 }
@@ -18,6 +19,7 @@ const bookSchema = new Schema<IBook>({
   author: { type: String },
   descriptions: { type: String, required: true },
   category: { type: String, required: true },
+  lenguage: { type: String, required: true },
   available: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
   pathBooks: { type: Schema.Types.ObjectId, ref: "ContentBooks", required: true },
