@@ -7,15 +7,15 @@ interface IBook extends Document {
   category: string;
   available?: boolean;
   createdAt?: Date;
-  idUser: ObjectId;
+  idUser?: ObjectId;
   pathBooks: ObjectId;
-  coverImage: { id_image: string; url_secura: string }; // Cambiado para usar ObjectId
+  coverImage: { id_image: string; url_secura: string };
 }
 
 const bookSchema = new Schema<IBook>({
   title: { type: String, required: true },
-  idUser: { type: Schema.Types.ObjectId, ref: "users", required: true }, // Ajustado a ObjectId para idUser
-  author: { type: String, required: true },
+  idUser: { type: Schema.Types.ObjectId, ref: "users" },
+  author: { type: String },
   descriptions: { type: String, required: true },
   category: { type: String, required: true },
   available: { type: Boolean, default: true },
@@ -26,7 +26,6 @@ const bookSchema = new Schema<IBook>({
       id_image: { type: String, required: true },
       url_secura: { type: String, required: true },
     },
-    required: true,
   },
 });
 

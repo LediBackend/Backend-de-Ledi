@@ -3,9 +3,9 @@ import { createBooks, deleteBooks, getBooks, getBooksById } from "../controllers
 
 const routerBooks = Router();
 
-routerBooks.get("/Books", getBooks);
-routerBooks.post("/Books", createBooks);
+routerBooks.get("/Books/getBooks", getBooks);
+routerBooks.post("/Books/create", createBooks);
 routerBooks.get("/Books/:id", getBooksById);
-routerBooks.delete("/Books/:id", deleteBooks);
+routerBooks.delete("/Books/delete/:id", deleteBooks);
 
 export default routerBooks;

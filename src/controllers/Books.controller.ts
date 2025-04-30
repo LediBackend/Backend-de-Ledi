@@ -7,6 +7,8 @@ import { PropCreateBooks, Result } from "../types/typesBooks";
 import ContentBook from "../models/content.books.model";
 import { subirImagen } from "../utils/uploadCorverImage";
 import fs from "fs";
+import { getForTitle } from "../utils/getbook";
+import { postBook } from "../utils/postBook";
 
 const getBooks: (a: Request, b: Response) => void = async (req, res) => {
   try {
@@ -16,17 +18,16 @@ const getBooks: (a: Request, b: Response) => void = async (req, res) => {
 
     res.status(200).json(result);
   } catch (error) {
-    console.log();
     console.error(chalk.red("Error en el controlador: getBooks"));
-    console.log();
-    console.log(error);
-    console.log();
   }
 };
 
 const createBooks: (a: Request, b: Response) => void = async (req, res) => {
   try {
     const { title, author, descriptions, category, available }: PropCreateBooks = req.body;
+
+    const existingBook = await getForTitle(title);
+    if (existingBook) return res.status(400).json({ msg: "El libro ya existe." });
 
     const file: UploadedFile | UploadedFile[] | undefined = req.files?.file;
     const img: UploadedFile | UploadedFile[] | undefined = req.files?.img;
@@ -49,22 +50,29 @@ const createBooks: (a: Request, b: Response) => void = async (req, res) => {
     const url = result?.secure_url;
     const id = result?.public_id;
 
+
+
+
+
     const newBook = new Book({
       title,
       author,
       descriptions,
       category,
       available,
-      idUser: "680325b80b5fa8b0d2e058a1",
       pathBooks: newContentBook._id,
       coverImage: { url_secura: url, id_image: id },
     });
 
-    await newBook.save();
+    const bookNew = await newBook.save();
 
     fs.unlinkSync(img.tempFilePath);
+    console.log(newBook)
+    if (bookNew) {
+      postBook(bookNew)
+      res.status(200).json({ msg: "libro subido correctamente" });
+    }
 
-    res.status(200).json({ msg: "libro subido correctamente" });
   } catch (error) {
     console.log();
     console.error(chalk.red("Error en el controlador: createBookss"));
@@ -111,6 +119,10 @@ const deleteBooks: (a: Request, b: Response) => void = async (req, res) => {
     console.log();
     console.log(error);
     console.log();
+    res.status(500).json({
+      msg: "Ocurrió un error al intentar eliminar el libro.",
+      error: error instanceof Error ? error.message : error,
+    });
   }
 };
 
