@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 export const save_user = async (email: string, password: string) => {
     const data = { password, email };
 
-    const response = await fetch('http://localhost:3402/user/', {
+    const response = await fetch('http://localhost:3402/user/email', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
