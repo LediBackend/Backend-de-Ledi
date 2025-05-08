@@ -13,6 +13,6 @@ routerBooks.post(
   createBooks
 );
 routerBooks.get("/Books/:id", getBooksById);
-routerBooks.delete("/Books/:id", deleteBooks);
+routerBooks.delete("/Books/delete/:id", deleteBooks);
 
 export default routerBooks;

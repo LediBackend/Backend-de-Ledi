@@ -17,11 +17,7 @@ const getBooks: (a: Request, b: Response) => void = async (req, res) => {
 
     res.status(200).json(result);
   } catch (error) {
-    console.log();
     console.error(chalk.red("Error en el controlador: getBooks"));
-    console.log();
-    console.log(error);
-    console.log();
   }
 };
 
@@ -113,6 +109,10 @@ const deleteBooks: (a: Request, b: Response) => void = async (req, res) => {
     console.log();
     console.log(error);
     console.log();
+    res.status(500).json({
+      msg: "Ocurrió un error al intentar eliminar el libro.",
+      error: error instanceof Error ? error.message : error,
+    });
   }
 };
 
