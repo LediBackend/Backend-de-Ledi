@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
+import { PropBooks } from "../types/typesBooks";
+import { formatter } from "../utils/textFormatter";
+import { subirImagen } from "../utils/uploadCorverImage";
+import { from } from "form-data";
 import Book from "../models/books.model";
 import chalk from "chalk";
-import path from "path";
-import { UploadedFile } from "express-fileupload";
-import { PropCreateBooks, Result } from "../types/typesBooks";
 import ContentBook from "../models/content.books.model";
-import { subirImagen } from "../utils/uploadCorverImage";
 import fs from "fs";
+import path from "path";
 
 const getBooks: (a: Request, b: Response) => void = async (req, res) => {
   try {
@@ -26,48 +27,49 @@ const getBooks: (a: Request, b: Response) => void = async (req, res) => {
 
 const createBooks: (a: Request, b: Response) => void = async (req, res) => {
   try {
-    const { title, author, descriptions, category, available }: PropCreateBooks = req.body;
+    const files = req.files as { [key: string]: Express.Multer.File[] };
+    const { title, author, descriptions, category, available, language, idUser }: PropBooks = req.body;
 
-    const file: UploadedFile | UploadedFile[] | undefined = req.files?.file;
-    const img: UploadedFile | UploadedFile[] | undefined = req.files?.img;
+    const img = files.img[0];
+    const file = files.file[0];
 
-    if (Array.isArray(file)) return res.status(400).json({ msg: "Solo se permite subir un archivo " });
-    if (Array.isArray(img)) return res.status(400).json({ msg: "Solo se permite subir una imagen de portada" });
+    console.log(file.path);
+    console.log(img.path);
 
-    if (!file || undefined) return res.status(404).json({ msg: "se requiere un documento conteniendo el Libro a Publicar" });
-    if (!img || undefined) return res.status(404).json({ msg: "se requiere Imagen de Portada Para poder publicar el libro " });
+    if (!file) return res.status(400).json({ msg: "Faltan archivos de texto con el contenido del libro" });
+    if (!img) return res.status(400).json({ msg: "Faltan archivos de la portada del libro " });
 
-    const newRoute = path.join(__dirname, "../uploads", file.name);
+    const textFormat = formatter(title);
+    const nameFormat = formatter(author);
 
-    await file.mv(newRoute);
+    const BookExist = await Book.findOne({ title: textFormat, author: nameFormat });
+    if (BookExist) return res.status(400).json({ msg: "El libro ya existe" });
 
-    const newContentBook = new ContentBook({ path: newRoute });
+    const result = await subirImagen(img.path);
+    if (!result) return res.status(400).json({ msg: "Error al subir la imagen" });
 
-    await newContentBook.save();
-
-    const result = await subirImagen(img.tempFilePath);
-    const url = result?.secure_url;
-    const id = result?.public_id;
+    const newContentBook = new ContentBook({ path: file.path });
 
     const newBook = new Book({
-      title,
-      author,
+      title: textFormat,
+      author: nameFormat,
       descriptions,
       category,
       available,
-      idUser: "680325b80b5fa8b0d2e058a1",
+      idUser,
       pathBooks: newContentBook._id,
-      coverImage: { url_secura: url, id_image: id },
+      coverImage: {
+        id_image: result.public_id,
+        url_secura: result.secure_url,
+      },
+      language,
     });
 
-    await newBook.save();
-
-    fs.unlinkSync(img.tempFilePath);
-
-    res.status(200).json({ msg: "libro subido correctamente" });
+    console.log(newBook);
+    console.log(newContentBook);
   } catch (error) {
     console.log();
-    console.error(chalk.red("Error en el controlador: createBookss"));
+    console.error(chalk.red("Error en el controlador: createBooks"));
     console.log();
     console.log(error);
     console.log();
