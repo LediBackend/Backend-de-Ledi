@@ -1,12 +1,13 @@
 import { ObjectId } from "mongoose";
 
-interface PropCreateBooks {
+interface PropBooks {
   title: string;
   author: string;
   descriptions: string;
   category: string;
   available: boolean;
   idUser: ObjectId;
+  language: string;
 }
 
 interface Result {
@@ -14,4 +15,4 @@ interface Result {
   id: string;
 }
 
-export { PropCreateBooks, Result };
+export { PropBooks, Result };
