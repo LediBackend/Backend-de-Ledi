@@ -1,13 +1,13 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import connectDB from './db/db'
+import connectDB from './infraestructura/DataBase/db/db'
 import * as dotenv from "dotenv";
 dotenv.config();
 import ENV from "./config/env";
 // import separatorConsole from "./utils/consoleSeparator";
 
-import { userRoutes } from "./routes/userService.routes"
+import { userRoutes } from "./interfaces/routes/userService.routes"
 const app = express();
 connectDB()
 app.use(cors());
